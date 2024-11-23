@@ -6,6 +6,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+svg {
+	height: 96px;
+	width: 96px;
+}
 
 @layer base {
   :root {

@@ -11,11 +11,11 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
-import { getCategories } from "./lib/data";
+import { getLocations } from "./lib/data";
 import Link from "next/link";
 
 export default async function CategoriesPage() {
-  const data = await getCategories();
+  const data = await getLocations();
 
   return (
     <div className="space-y-4">

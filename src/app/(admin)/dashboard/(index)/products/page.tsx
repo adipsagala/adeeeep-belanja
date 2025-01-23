@@ -30,7 +30,7 @@ export default async function ProductPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable columns={columns} data={[]} />
+          <DataTable columns={columns} data={products} />
         </CardContent>
       </Card>
     </div>

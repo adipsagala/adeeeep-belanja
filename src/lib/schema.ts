@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { number, z } from "zod";
 
 export const ALLOW_MIME_TYPES = ["image/jpg", "image/jpeg", "image/png"];
 
@@ -54,7 +54,11 @@ export const schemaProduct = z.object({
         return validate;
       },
       {
-        message: 'Uploaded file should image',
+        message: "Uploaded file should image",
       }
     ),
 });
+
+export const schemaProductEdit = schemaProduct.extend({
+  id: z.number({ required_error: "Product ID is required" }),
+}).omit({images: true});

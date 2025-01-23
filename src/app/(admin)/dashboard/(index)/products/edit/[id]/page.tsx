@@ -1,5 +1,5 @@
+import { Tedit } from "@/types";
 import React from 'react'
-import FormProduct from '../_components/form-product'
 import {
     Select,
     SelectContent,
@@ -8,20 +8,28 @@ import {
     SelectValue,
   } from "@/components/ui/select";
 import { Label } from '@/components/ui/label';
-import { getBrands } from '../../brands/lib/data';
-import { getCategories } from '../../categories/lib/data';
-import { getLocations } from '../../locations/lib/data';
+import FormProduct from "../../_components/form-product";
+import { getBrands } from "../../../brands/lib/data";
+import { getCategories } from "../../../categories/lib/data";
+import { getLocations } from "../../../locations/lib/data";
+import { getProductById } from "../../lib/data";
+import { redirect } from "next/navigation";
+import { getImageUrl } from "@/lib/supabase";
 
-export default async function CreatePage() {
+export default async function EditPage({ params }: Tedit) {
+    const product = await getProductById(Number.parseInt(params.id))
     const brands = await getBrands()
     const categories = await getCategories()
     const locations = await getLocations()
 
+    if (!product) {
+        return redirect('/dashboard/products')
+    }
     return (
-        <FormProduct type='ADD'>
+        <FormProduct type='EDIT' data={product}>
             <div className="grid gap-3">
                           <Label htmlFor="category">Category</Label>
-                          <Select name="category_id">
+                          <Select name="category_id" defaultValue={product.category_id.toString()}>
                             <SelectTrigger
                               id="category"
                               aria-label="Select category"
@@ -39,7 +47,7 @@ export default async function CreatePage() {
                           <Label htmlFor="brand">
                             Brand
                           </Label>
-                          <Select name="brand_id">
+                          <Select name="brand_id" defaultValue={product.brand_id.toString()}>
                             <SelectTrigger
                               id="brand"
                               aria-label="Select Brand"
@@ -57,7 +65,7 @@ export default async function CreatePage() {
                           <Label htmlFor="location">
                             Location
                           </Label>
-                          <Select name="location_id">
+                          <Select name="location_id" defaultValue={product.location_id.toString()}>
                             <SelectTrigger
                               id="location"
                               aria-label="location"

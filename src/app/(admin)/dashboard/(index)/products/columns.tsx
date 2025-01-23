@@ -9,6 +9,7 @@ import { Column, ColumnDef } from "@tanstack/react-table";
 import { Edit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import FormDelete from "./_components/form-delete";
 
 export type TColumn = {
   id: number;
@@ -32,7 +33,7 @@ export const columns: ColumnDef<TColumn>[] = [
       return (
         <div className="inline-flex items-center gap-5">
           <Image
-            src={getImageUrl(product.image_url)}
+            src={getImageUrl(product.image_url, 'products')}
             alt="Product"
             width={80}
             height={80}
@@ -76,17 +77,17 @@ export const columns: ColumnDef<TColumn>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const brand = row.original;
+      const product = row.original;
 
       return (
         <div className="space-x-4 inline-flex">
           <Button size="sm" asChild>
-            <Link href={`/dashboard/brands/edit/${brand.id}`}>
+            <Link href={`/dashboard/products/edit/${product.id}`}>
               <Edit className="w-4 h-4 mr-2" />
               Edit
             </Link>
           </Button>
-          {/* <FormDelete id={brand.id} /> */}
+          <FormDelete id={product.id} />
         </div>
       );
     },

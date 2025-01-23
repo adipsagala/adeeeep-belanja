@@ -28,6 +28,11 @@ export async function getProducts() {
             name: true,
           },
         },
+        location: {
+          select: {
+            name: true,
+          },
+        },
         images: true,
       },
     });
@@ -50,5 +55,20 @@ export async function getProducts() {
   } catch (error) {
     console.log(error);
     return [];
+  }
+}
+
+export async function getProductById(id: number) {
+  try {
+    const product = await prisma.product.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    return product;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 }

@@ -25,10 +25,13 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import UploadImages from "./upload-images";
 import { ActionResult } from "@/types";
-import { storeProduct } from "../lib/actions";
+import { storeProduct, updateProduct } from "../lib/actions";
+import { Product } from "@prisma/client";
 
 interface FormProductProps {
     children: ReactNode
+    type: 'ADD' | 'EDIT'
+    data?: Product | null
 }
 
 const initialFormState: ActionResult = {
@@ -45,9 +48,10 @@ function SubmitButton() {
   );
 }
 
-export default function FormProduct({children}: FormProductProps) {
+export default function FormProduct({children, type, data}: FormProductProps) {
 
-  const [state, formAction] = useActionState(storeProduct, initialFormState)
+  const updateProductWithId = (_: unknown, formData: FormData) => updateProduct(_, formData, data?.id ?? 0)
+  const [state, formAction] = useActionState(type === "ADD" ? storeProduct : updateProductWithId, initialFormState)
     
   return (
     <form action={formAction}>
@@ -55,7 +59,7 @@ export default function FormProduct({children}: FormProductProps) {
         <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
           <div className="flex items-center gap-4">
             <Button variant="outline" size="icon" className="h-7 w-7" asChild>
-              <Link href="/dashboard/brands">
+              <Link href="/dashboard/products">
                 <ChevronLeft className="h-4 w-4" />
                 <span className="sr-only">Back</span>
               </Link>
@@ -101,14 +105,28 @@ export default function FormProduct({children}: FormProductProps) {
                         type="text"
                         name="name"
                         className="w-full"
+                        defaultValue={data?.name}
+                      />
+                    </div>
+
+                    <div className="grid gap-3">
+                      <Label htmlFor="price">Price</Label>
+                      <Input
+                        id="price"
+                        type="number"
+                        name="price"
+                        className="w-full"
+                        defaultValue={Number(data?.price ?? 0)}
                       />
                     </div>
                 
                     <div className="grid gap-3">
                       <Label htmlFor="description">Description</Label>
                       <Textarea
+                        name="description"
                         id="description"
                         className="min-h-32"
+                        defaultValue={data?.description}
                       />
                     </div>
                   </div>
@@ -134,7 +152,7 @@ export default function FormProduct({children}: FormProductProps) {
                   <div className="grid gap-6">
                     <div className="grid gap-3">
                       <Label htmlFor="status">Status</Label>
-                      <Select>
+                      <Select name="stock" defaultValue={data?.stock}>
                         <SelectTrigger id="status" aria-label="Select status">
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>

@@ -8,7 +8,7 @@ export default async function EditPage({ params }: Tedit) {
     const data = await getCategoryById(params.id);
 
     if (!data) {
-        return redirect("/dashboard/categories");
+        return redirect("/dashboard/locations");
     }
 
     return <FormCategory type="EDIT" data={data} />;
